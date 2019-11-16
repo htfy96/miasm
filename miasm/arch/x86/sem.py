@@ -1400,7 +1400,7 @@ def call(ir, instr, dst):
             m2 = base.zeroExtend(meip.size)
         elif dst.op == "far":
             # Far call far [eax]
-            addr = dst.args[0].arg
+            addr = dst.args[0].ptr
             m1 = ir.ExprMem(addr, CS.size)
             m2 = ir.ExprMem(addr + m2_expr.ExprInt(2, addr.size), meip.size)
         else:
@@ -1528,7 +1528,7 @@ def jmp(ir, instr, dst):
             m2 = base.zeroExtend(meip.size)
         elif dst.op == "far":
             # Far jmp far [eax]
-            addr = dst.args[0].arg
+            addr = dst.args[0].ptr
             m1 = ir.ExprMem(addr, CS.size)
             m2 = ir.ExprMem(addr + m2_expr.ExprInt(2, addr.size), meip.size)
         else:
@@ -2625,7 +2625,7 @@ def fnstenv(ir, instr, dst):
     e.append(m2_expr.ExprAssign(ad, float_control))
     ad = ir.ExprMem(
         dst.ptr + m2_expr.ExprInt(
-            size // (8 * 1),
+            (size // 8) * 1,
             dst.ptr.size
         ),
         size=16
@@ -2633,7 +2633,7 @@ def fnstenv(ir, instr, dst):
     e.append(m2_expr.ExprAssign(ad, status_word))
     ad = ir.ExprMem(
         dst.ptr + m2_expr.ExprInt(
-            size // (8 * 3),
+            (size // 8) * 3,
             dst.ptr.size
         ),
         size=size
@@ -2641,7 +2641,7 @@ def fnstenv(ir, instr, dst):
     e.append(m2_expr.ExprAssign(ad, float_eip[:size]))
     ad = ir.ExprMem(
         dst.ptr + m2_expr.ExprInt(
-            size // (8 * 4),
+            (size // 8) * 4,
             dst.ptr.size
         ),
         size=16
@@ -2649,7 +2649,7 @@ def fnstenv(ir, instr, dst):
     e.append(m2_expr.ExprAssign(ad, float_cs))
     ad = ir.ExprMem(
         dst.ptr + m2_expr.ExprInt(
-            size // (8 * 5),
+            (size // 8) * 5,
             dst.ptr.size
         ),
         size=size
@@ -2657,7 +2657,7 @@ def fnstenv(ir, instr, dst):
     e.append(m2_expr.ExprAssign(ad, float_address[:size]))
     ad = ir.ExprMem(
         dst.ptr + m2_expr.ExprInt(
-            size // (8 * 6),
+            (size // 8) * 6,
             dst.ptr.size
         ),
         size=16
